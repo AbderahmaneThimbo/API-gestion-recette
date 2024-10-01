@@ -87,7 +87,7 @@ L'API sera accessible à `http://localhost:3000`.
   {
     "id": 1,
     "titre": "Tarte aux pommes",
-    "type": "Dessert",
+    "type": "plat",
     "ingredients": "Pommes, Sucre, Pâte"
   }
 ]
@@ -101,7 +101,7 @@ L'API sera accessible à `http://localhost:3000`.
 ```json
 {
   "titre": "Salade César",
-  "type": "Entrée",
+  "type": "entrée",
   "ingredients": "Laitue, Poulet, Parmesan, Croutons"
 }
 ```
@@ -122,7 +122,7 @@ L'API sera accessible à `http://localhost:3000`.
 ```json
 {
   "titre": "Pizza améliorée",
-  "type": "Plat principal",
+  "type": "plat",
   "ingredients": "Tomates, Fromage, Pâte, Basilic"
 }
 ```
@@ -181,16 +181,16 @@ Ce projet utilise **Docker** pour la containerisation, ce qui permet de déploye
 
 1. **Lien vers l'image DockerHub** : [ lien image](https://hub.docker.com/r/abderahmanethimbo/recette)
 
-2. **Lancer les conteneurs Docker** :
+2. **Pour construire le conteneurs Docker** :
 
    ```bash
-    docker-compose up -d
+    docker-compose up --build   
    ```
 
 3. **Connexion au service MySQL** :
 
    ```bash
-   docker exec -it recette_mysql mysql -u root -p
+    docker exec -it recette_mysql mysql -u root -p
    ```
 
 4. **Créer la base de données et les tables** :
@@ -200,19 +200,20 @@ Ce projet utilise **Docker** pour la containerisation, ce qui permet de déploye
    CREATE DATABASE IF NOT EXISTS  gestion_recettes;
    USE gestion_recettes;
 
-  CREATE TABLE IF NOT EXISTS recettes (
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    titre VARCHAR(100) NOT NULL UNIQUE,
-    type VARCHAR (50) NOT NULL,
-    ingredients text NOT NULL
- );
+   CREATE TABLE IF NOT EXISTS recettes (
+     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+     titre VARCHAR(100) NOT NULL UNIQUE,
+     type VARCHAR (50) NOT NULL,
+     ingredients text NOT NULL
+   );
 ```
+
 
 ## Documentation et Collection Postman
 
 Pour tester les différents endpoints de l'API, vous pouvez utiliser la collection Postman incluse dans ce projet. Elle contient toutes les requêtes configurées pour interagir avec l'API.
 
-- **Exporter la collection** : `recettes_collection.json`
+- **Exporter la collection** : `gestion-recette-API-collection` 
 - **Importer dans Postman** et exécuter les requêtes.
 
 ## Auteur
