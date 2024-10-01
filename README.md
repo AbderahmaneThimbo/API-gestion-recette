@@ -27,7 +27,7 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
 **Clonez le repository :**
 
 ```bash
-git clone https://github.com/HarounaTraore/API-gestion-recette.git
+git clone https://github.com/AbderahmaneThimbo/API-gestion-recette.git
 ```
 
 **Accédez au dossier du projet :**
@@ -179,32 +179,33 @@ Ce projet utilise **Docker** pour la containerisation, ce qui permet de déploye
 
 ### Instructions pour Docker :
 
-1. **Lien vers l'image DockerHub** : [ lien image](https://hub.docker.com/r/harounatraore/recette)
+1. **Lien vers l'image DockerHub** : [ lien image](https://hub.docker.com/r/abderahmanethimbo/recette)
 
 2. **Lancer les conteneurs Docker** :
 
    ```bash
     docker-compose up -d
    ```
+
 3. **Connexion au service MySQL** :
-   
-    ```bash
-    docker exec -it recette_mysql mysql -u root -p
+
+   ```bash
+   docker exec -it recette_mysql mysql -u root -p
    ```
 
 4. **Créer la base de données et les tables** :
 
- ```sql
-    CREATE DATABASE IF NOT EXISTS gestion_recettes;
-    USE gestion_recettes;
+```sql
+   DROP DATABASE IF EXISTS gestion_recettes;
+   CREATE DATABASE IF NOT EXISTS  gestion_recettes;
+   USE gestion_recettes;
 
-    
-    CREATE TABLE IF NOT EXISTS recettes (
-       id INT AUTO_INCREMENT PRIMARY KEY,
-       titre VARCHAR(255) NOT NULL,
-       type VARCHAR(50) NOT NULL,
-       ingredients VARCHAR(255) NOT NULL
-    );
+  CREATE TABLE IF NOT EXISTS recettes (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    titre VARCHAR(100) NOT NULL UNIQUE,
+    type VARCHAR (50) NOT NULL,
+    ingredients text NOT NULL
+ );
 ```
 
 ## Documentation et Collection Postman
@@ -215,9 +216,5 @@ Pour tester les différents endpoints de l'API, vous pouvez utiliser la collecti
 - **Importer dans Postman** et exécuter les requêtes.
 
 ## Auteur
-
-[Harouna Traoré](https://github.com/HarounaTraore)
-
-## Contributeur
 
 [Abderahmane Thimbo](https://github.com/AbderahmaneThimbo)

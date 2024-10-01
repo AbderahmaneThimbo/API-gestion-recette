@@ -6,7 +6,7 @@ describe("Recette tests", () => {
   it("can be created", async () => {
     const recette = {
       titre: "crepe",
-      type: "dessert",
+      type: "plat",
       ingredients: "farine",
     };
     const result = await Recette.createRecette(
@@ -22,7 +22,7 @@ describe("Recette tests", () => {
   it("can be updated", async () => {
     const updatedRecette = {
       titre: "gâteau",
-      type: "dessert",
+      type: "plat",
       ingredients: "farine, sucre",
     };
 

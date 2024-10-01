@@ -3,37 +3,55 @@ import { StatusCodes } from "http-status-codes";
 import RecetteModel from "./models/RecetteModel.js";
 
 const addRequestValidator = [
+  // Validation du titre
   check("titre")
-    .not()
-    .isEmpty()
-    .withMessage("Titre est oblgatoire")
+    .notEmpty()
+    .withMessage("Titre est obligatoire")
     .bail()
-
-    .isLength({ min: 3 })
-    .withMessage("Minimun 3 caractère requis!")
+    .isLength({ min: 5, max: 100 })
+    .withMessage("Le titre doit contenir entre 5 et 100 caractères!")
     .bail()
-
     .custom(async (value) => {
       const result = await RecetteModel.checkRecette(value);
       if (result !== 0) {
-        throw new Error("Deux recettes ne peuvent pas avoir même titre!");
+        throw new Error("Deux recettes ne peuvent pas avoir le même titre!");
       }
       return true;
     }),
+
+  // Validation des ingrédients
+  check("ingredients")
+    .notEmpty()
+    .withMessage("Les ingrédients sont obligatoires")
+    .bail()
+    .isLength({ min: 10, max: 500 })
+    .withMessage("Les ingrédients doivent contenir entre 10 et 500 caractères"),
+
+  // Validation du type
+  check("type")
+    .notEmpty()
+    .withMessage("Le type est obligatoire")
+    .bail()
+    .isIn(["entrée", "plat", "dessert"])
+    .withMessage('Le type doit être "entrée", "plat" ou "dessert"'),
+
+  // Gestion des erreurs
   (req, res, next) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty())
+    if (!errors.isEmpty()) {
       return res
         .status(StatusCodes.UNPROCESSABLE_ENTITY)
         .json({ errors: errors.array() });
+    }
     next();
   },
 ];
 
 const updateRequestValidator = [
+  // Validation de l'id
   param("id")
     .notEmpty()
-    .withMessage("Id est requis!")
+    .withMessage("L'ID est requis!")
     .bail()
     .custom(async (value) => {
       const result = await RecetteModel.getById(value);
@@ -42,12 +60,14 @@ const updateRequestValidator = [
       }
       return true;
     }),
+
+  // Validation du titre
   check("titre")
     .notEmpty()
-    .withMessage("Titre ne doit pas être vide")
+    .withMessage("Le titre est obligatoire")
     .bail()
-    .isLength({ min: 3 })
-    .withMessage("Minimum 6 caractères requis!")
+    .isLength({ min: 5, max: 100 })
+    .withMessage("Le titre doit contenir entre 5 et 100 caractères")
     .bail()
     .custom(async (value) => {
       const result = await RecetteModel.checkRecette(value);
@@ -56,34 +76,40 @@ const updateRequestValidator = [
       }
       return true;
     }),
+
+  // Validation des ingrédients
   check("ingredients")
     .notEmpty()
-    .withMessage("Ingredients ne peut pas être vide!")
+    .withMessage("Les ingrédients ne peuvent pas être vides!")
     .bail()
-    .isLength({ min: 10, max: 50 })
-    .withMessage("Entre 10 et 50 caractères!")
-    .bail(),
+    .isLength({ min: 10, max: 500 })
+    .withMessage("Les ingrédients doivent contenir entre 10 et 500 caractères"),
+
+  // Validation du type
   check("type")
     .notEmpty()
-    .withMessage("Type ne peut pas être vide!")
+    .withMessage("Le type de recette est obligatoire")
     .bail()
-    .isLength({ min: 4 })
-    .withMessage("Minimum 4 caractères requis!")
-    .bail(),
+    .isIn(["entrée", "plat", "dessert"])
+    .withMessage('Le type doit être "entrée", "plat" ou "dessert"'),
+
+  // Gestion des erreurs
   (req, res, next) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty())
+    if (!errors.isEmpty()) {
       return res
         .status(StatusCodes.UNPROCESSABLE_ENTITY)
         .json({ errors: errors.array() });
+    }
     next();
   },
 ];
+
 const deleteRequestValidator = [
+  // Validation de l'id
   param("id")
-    .not()
-    .isEmpty()
-    .withMessage("Id est obligatoire !")
+    .notEmpty()
+    .withMessage("L'ID est obligatoire!")
     .bail()
     .custom(async (value) => {
       const result = await RecetteModel.getById(value);
@@ -93,12 +119,14 @@ const deleteRequestValidator = [
       return true;
     }),
 
+  // Gestion des erreurs
   (req, res, next) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty())
+    if (!errors.isEmpty()) {
       return res
         .status(StatusCodes.UNPROCESSABLE_ENTITY)
         .json({ errors: errors.array() });
+    }
     next();
   },
 ];
